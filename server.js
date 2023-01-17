@@ -2,18 +2,22 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const dbConnection = require('./config/database');
+const routes = require("./routes/categoryRouts")
 
 dotenv.config({path:'config.env'});
 
 
-
+// express app
 const app = express();
 
-mongoose.connect(process.env.DATABASE_CONNECTION_STRING).then((conn)=>{
-    console.log(`Database connected at ${conn.connection.host}`);
-}).catch((err)=>{
-    console.log(`database error ${err}`);
-});
+
+// connect database
+dbConnection();
+
+
+// Middleware
+app.use(express.json());
 
 if(process.env.MODE_ENV == "development"){
     app.use(morgan('dev'));
@@ -21,11 +25,11 @@ if(process.env.MODE_ENV == "development"){
     // process.exit(1);
 }
 
-app.get("/",(req,res)=>{
-    res.send("Hello, World");
-})
+//Mount routes
+app.use('/api/v1/categories', routes);
 
- const PORT = process.env.PORT;
+// listen
+const PORT = process.env.PORT;
 app.listen(PORT,()=>{
     console.log("PORT " + PORT);   
 })
