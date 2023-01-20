@@ -49,3 +49,15 @@ exports.updateCategory =  asyncHandler(async (req,res)=>{
     
 }
 );
+
+
+exports.deleteCategoryByID =  asyncHandler(async (req,res)=>{
+    const {id} = req.params;
+    const category = await CategoryModel.findByIdAndDelete(id);
+    if(!category){
+        res.status(404).json({'msg': `No category with id ${id}`});
+    }
+    res.status(204).send();
+    
+}
+);
