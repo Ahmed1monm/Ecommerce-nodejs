@@ -13,10 +13,13 @@ exports.createCategory =  asyncHandler(async (req,res)=>{
 );
 
 exports.getCategories =  asyncHandler(async (req,res)=>{
-    
-    const categories = await CategoryModel.find({});
+    const page = req.query.page *1 || 1;
+    const limit = req.query.limit || 5;
+    const skip = (page-1) * limit;
+    const categories = await CategoryModel.find({}).skip(skip).limit(limit);
     res.status(200).json({
         "results": categories.length,
+        page,
         "data": categories
     });
     
