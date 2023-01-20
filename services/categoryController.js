@@ -10,4 +10,15 @@ exports.createCategory =  asyncHandler(async (req,res)=>{
     });
     
 }
-)
+);
+
+exports.getCategories =  asyncHandler(async (req,res)=>{
+    
+    const categories = await CategoryModel.find({});
+    res.status(200).json({
+        "results": categories.length,
+        "data": categories
+    });
+    
+}
+);
