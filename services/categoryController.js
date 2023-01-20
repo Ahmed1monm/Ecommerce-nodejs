@@ -37,3 +37,15 @@ exports.getCategoryByID =  asyncHandler(async (req,res)=>{
     
 }
 );
+
+exports.updateCategory =  asyncHandler(async (req,res)=>{
+    const {id} = req.params;
+    const { name } = req.body;
+    const category = await CategoryModel.findOneAndUpdate({_id:id},{name, slug : slugify(name)},{new: true});
+    if(!category){
+        res.status(404).json({'msg': `No category with id ${id} or name ${name}`});
+    }
+    res.status(200).json({'msg':'Success', 'category': category});
+    
+}
+);
