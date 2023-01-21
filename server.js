@@ -27,6 +27,16 @@ if(process.env.MODE_ENV == "development"){
 
 //Mount routes
 app.use('/api/v1/categories', routes);
+app.all("*",(req,res,next)=>{
+    error = new Error(`Can't find this route ${req.originalUrl}`);
+    next(error.message);
+})
+
+// Global Error Handling Middleware
+app.use((err,req,res,next)=>{
+    res.status(500).json({err})
+});
+
 
 // listen
 const PORT = process.env.PORT;
