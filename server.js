@@ -41,13 +41,18 @@ app.use(globalErrorHandeller);
 
 // listen
 const PORT = process.env.PORT;
-app.listen(PORT,()=>{
+const server = app.listen(PORT,()=>{
     console.log("PORT " + PORT);   
 })
 
 // Event => Listen => callback(err)
+// Handling rejections outside express
 process.on('unhandledRejection',(err)=>{    
    
     console.log(`====>>     UnhandledRejection error: ${err}      <<=====`);
-    process.exit(1);
+    server.close(()=>{
+        console.log("Shutdown server");
+        process.exit(1);
+    })
+   
 })
