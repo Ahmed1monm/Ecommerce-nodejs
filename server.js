@@ -35,7 +35,7 @@ app.all("*",(req,res,next)=>{
     next(error);
 })
 
-// Global Error Handling Middleware
+// Global Error Handling Middleware for express
 app.use(globalErrorHandeller);
 
 
@@ -43,4 +43,11 @@ app.use(globalErrorHandeller);
 const PORT = process.env.PORT;
 app.listen(PORT,()=>{
     console.log("PORT " + PORT);   
+})
+
+// Event => Listen => callback(err)
+process.on('unhandledRejection',(err)=>{    
+   
+    console.log(`====>>     UnhandledRejection error: ${err}      <<=====`);
+    process.exit(1);
 })
