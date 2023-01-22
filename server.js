@@ -3,8 +3,9 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const dbConnection = require('./config/database');
-const routes = require("./routes/categoryRouts")
-
+const routes = require("./routes/categoryRouts");
+const ApiError = require('./utils/ApiError'); 
+const globalErrorHandeller = require('./middlewares/globalErrorHandeller');
 dotenv.config({path:'config.env'});
 
 
@@ -28,14 +29,14 @@ if(process.env.MODE_ENV == "development"){
 //Mount routes
 app.use('/api/v1/categories', routes);
 app.all("*",(req,res,next)=>{
-    error = new Error(`Can't find this route ${req.originalUrl}`);
-    next(error.message);
+
+    //error = new Error(`Can't find this route ${req.originalUrl}`);
+    error = new ApiError(`Can't find this route ${req.originalUrl}`, 404);
+    next(error);
 })
 
 // Global Error Handling Middleware
-app.use((err,req,res,next)=>{
-    res.status(500).json({err})
-});
+app.use(globalErrorHandeller);
 
 
 // listen
