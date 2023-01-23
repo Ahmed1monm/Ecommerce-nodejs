@@ -1,10 +1,10 @@
 const { check } = require('express-validator');
 const validationMiddelware = require('../../middlewares/validator');
 
-// exports.getCategoryValidator = [
-//     check('id').isMongoId().withMessage("Invalid mongo ID format"), // Rule
-//     validationMiddelware // Validator Middelware
-// ]
+exports.getSubCategoryValidator = [
+    check('id').isMongoId().withMessage("Invalid mongo ID format"), // Rule
+    validationMiddelware // Validator Middelware
+]
 
 exports.createSubCategoryValidator =[
     check('name')
@@ -23,13 +23,18 @@ exports.createSubCategoryValidator =[
 ]
 
 
-// exports.updateCategoryValidator = [
-//     check('id').isMongoId().withMessage("Invalid mongo ID format"), // Rule
-//     validationMiddelware // Validator Middelware
-// ]
+exports.updateSubCategoryValidator = [
+    check('id').isMongoId().withMessage("Invalid mongo ID format"),
+    check('category')
+    .notEmpty()
+    .withMessage("Enter Parent Category")
+    .isMongoId()
+    .withMessage("Inavalid Parent Category Format"),// Rule
+    validationMiddelware // Validator Middelware
+]
 
 
-// exports.deleteCategoryValidator = [
-//     check('id').isMongoId().withMessage("Invalid mongo ID format"), // Rule
-//     validationMiddelware // Validator Middelware
-// ]
+exports.deleteSubCategoryValidator = [
+    check('id').isMongoId().withMessage("Invalid mongo ID format"), // Rule
+    validationMiddelware // Validator Middelware
+]
