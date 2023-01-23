@@ -2,9 +2,13 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const dbConnection = require('./config/database');
-const routes = require("./routes/categoryRouts");
+const CategoryRoutes = require("./routes/categoryRouts");
+const SubCategoryRoutes = require("./routes/subCategoryRouts");
+
 const ApiError = require('./utils/ApiError'); 
 const globalErrorHandeller = require('./middlewares/globalErrorHandeller');
+
+
 dotenv.config({path:'config.env'});
 
 
@@ -19,18 +23,20 @@ dbConnection();
 // Middleware
 app.use(express.json());
 
-if(process.env.MODE_ENV == "development"){
+if(process.env.MODE_ENV === "development"){
     app.use(morgan('dev'));
     console.log(`mode: ${ process.env.MODE_ENV }`);
     // process.exit(1);
 }
 
 //Mount routes
-app.use('/api/v1/categories', routes);
+app.use('/api/v1/categories', CategoryRoutes);
+app.use('/api/v1/sub-categories', SubCategoryRoutes);
+
 app.all("*",(req,res,next)=>{
 
     //error = new Error(`Can't find this route ${req.originalUrl}`);
-    error = new ApiError(`Can't find this route ${req.originalUrl}`, 404);
+   const error = new ApiError(`Can't find this route ${req.originalUrl}`, 404);
     next(error);
 })
 
@@ -39,9 +45,9 @@ app.use(globalErrorHandeller);
 
 
 // listen
-const PORT = process.env.PORT;
+const {PORT} = process.env;
 const server = app.listen(PORT,()=>{
-    console.log("PORT " + PORT);   
+    console.log(`PORT ${  PORT}`);   
 })
 
 // Event => Listen => callback(err)
