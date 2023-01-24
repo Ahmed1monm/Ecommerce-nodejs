@@ -4,6 +4,15 @@ const SubCategoryModel = require('../models/subCategory');
 const ApiError = require('../utils/ApiError');
 
 
+
+exports.setCategoryIdToBody = (req,res,next)=>
+{
+    if (!req.body.category ) {
+        req.body.category = req.params.categoryId;
+    }
+    next();
+}
+
 exports.createSubCategory =  asyncHandler(async (req,res)=>{
     const {name, category} = req.body;
     const subCategory = await SubCategoryModel.create({name, slug:slugify(name), category});
@@ -17,7 +26,14 @@ exports.getSubCategories =  asyncHandler(async (req,res)=>{
     const page = req.query.page *1 || 1;
     const limit = req.query.limit || 5;
     const skip = (page-1) * limit;
-    const Subcategories = await SubCategoryModel.find({}).skip(skip).limit(limit);
+    let filterObject = {};
+    if(req.params.categoryId){ // For nasted routes
+        filterObject = {category: req.params.categoryId};
+        console.log(`filterObject ${filterObject.categoryId}`);
+    }
+    console.log(req.params);
+    const Subcategories = await SubCategoryModel.find(filterObject)
+    .skip(skip).limit(limit)
     res.status(200).json({
         "results": Subcategories.length,
         page,
@@ -65,3 +81,4 @@ exports.deleteSubCategoryByID =  asyncHandler(async (req,res, next)=>{
     
 }
 );
+
