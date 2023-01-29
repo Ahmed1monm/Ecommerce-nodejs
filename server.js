@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const dbConnection = require('./config/database');
 const CategoryRoutes = require("./routes/categoryRouts");
 const SubCategoryRoutes = require("./routes/subCategoryRouts");
+const BrandRoutes = require("./routes/brandRouts");
+
 
 const ApiError = require('./utils/ApiError'); 
 const globalErrorHandeller = require('./middlewares/globalErrorHandeller');
@@ -32,6 +34,8 @@ if(process.env.MODE_ENV === "development"){
 //Mount routes
 app.use('/api/v1/categories', CategoryRoutes);
 app.use('/api/v1/sub-categories', SubCategoryRoutes);
+app.use('/api/v1/brands', BrandRoutes);
+
 
 app.all("*",(req,res,next)=>{
 
