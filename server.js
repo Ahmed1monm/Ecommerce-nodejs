@@ -5,6 +5,7 @@ const dbConnection = require('./config/database');
 const CategoryRoutes = require("./routes/categoryRouts");
 const SubCategoryRoutes = require("./routes/subCategoryRouts");
 const BrandRoutes = require("./routes/brandRouts");
+const ProductRoutes = require('./routes/productRouters');
 
 
 const ApiError = require('./utils/ApiError'); 
@@ -35,6 +36,8 @@ if(process.env.MODE_ENV === "development"){
 app.use('/api/v1/categories', CategoryRoutes);
 app.use('/api/v1/sub-categories', SubCategoryRoutes);
 app.use('/api/v1/brands', BrandRoutes);
+app.use('/api/v1/products', ProductRoutes);
+
 
 
 app.all("*",(req,res,next)=>{
